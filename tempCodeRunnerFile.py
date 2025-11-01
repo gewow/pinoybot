@@ -1,23 +1,14 @@
-def extract_filipino_affix_features(word):
-    word_lowered = word.lower()
-    features = {}
+# --- Test for Task 2.5 ---
+print("\nTesting Master Feature Extractor:")
+test_words = ['naglunch', 'kumain', 'corrupt', 'playing', 'Manila', '.', '2023']
 
-    #Prefixes
-    features['has_nag_prefix'] = bool(re.match(r"^nag", word_lowered))
-    features['has_na_prefix'] = bool(re.match(r"^na", word_lowered))
-    features['has_mag_prefix'] = bool(re.match(r"^mag", word_lowered))
-    features['has_ma_prefix'] = bool(re.match(r"^ma", word_lowered))
-    features['has_pag_prefix'] = bool(re.match(r"^pag", word_lowered))
-    features['has_pinag_prefix'] = bool(re.match(r"^pinag", word_lowered))
-    features['has_pina_prefix'] = bool(re.match(r"^pina", word_lowered))
+for word in test_words:
+    features = extract_all_features(word)
+    print(f"\nWord: '{word}' ({len(features)} features extracted)")
+    
+    # Let's just show a few features to prove it works
+    print(f"  ... has_nag_prefix: {features.get('has_nag_prefix')}")
+    print(f"  ... has_ing_suffix: {features.get('has_ing_suffix')}")
+    print(f"  ... vowel_ratio: {features.get('vowel_ratio')}")
+    print(f"  ... is_number: {features.get('is_number')}")
 
-
-    #Suffixes
-    features['has_an_suffix'] = bool(re.search(r"an$", word_lowered))
-    features['has_hin_suffix'] = bool(re.search(r"hin$", word_lowered))
-    features['has_in_suffix'] = bool(re.search(r"in$", word_lowered))
-
-    #Infixes
-    #infix should be in between a consonant and a vowel making words like kUMain FIL and words like hUMan NOT FIL (ENG)
-    features['has_in_infix'] = bool(re.match(r'^[bcdfghjklmnpqrstvwxyz]in[aeiou]', word_lowered))  
-    features['has_um_infix'] = bool(re.match(r'^[bcdfghjklmnpqrstvwxyz]um[aeiou]', word_lowered))
