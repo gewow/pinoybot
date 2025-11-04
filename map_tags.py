@@ -1,5 +1,7 @@
 import pandas as pd
 import re
+import pickle
+import os
 
 #Map the fine-grained tags (Fil, Eng, CS, etc.) into 3 classes (FIL, ENG, OTH)
 #This will be used to train the model
@@ -154,27 +156,97 @@ def extract_all_features(word):
     return features
     
 
-#use the function in apply to determine the tag and creates a panda series (kind of like a list)
+def create_feature_matrix(data):
+    feature_dicts = []
+
+    for idx, row in data.iterrows():
+        word = str(row['word'])
+        features = extract_all_features(word)
+        feature_dicts.append(features)
+
+    
+    X = pd.DataFrame(feature_dicts)
+    y = data['three_class_label']
+
+    feature_names  = list(X.columns)
+
+    return X, y, feature_names
+
+def analyze_features(X, y):
+   
+    print("\n" + "="*50)
+    print("FEATURE ANALYSIS")
+    print("="*50)
+    
+    # combine X and y into one DataFrame for easy filtering
+    analysis_df = X.copy()
+    analysis_df['label'] = y
+    
+    # check FIL features
+    print("\n--- Top 5 Features for FIL ---")
+    # get all rows that are FIL, sum up their feature columns, and show the biggest
+    fil_features = analysis_df[analysis_df['label'] == 'FIL'].sum(numeric_only=True)
+    print(fil_features.sort_values(ascending=False).head(5))
+    
+    # check ENG features
+    print("\n--- Top 5 Features for ENG ---")
+    eng_features = analysis_df[analysis_df['label'] == 'ENG'].sum(numeric_only=True)
+    print(eng_features.sort_values(ascending=False).head(5))
+    
+    # check OTH features
+    print("\n--- Top 5 Features for OTH ---")
+    oth_features = analysis_df[analysis_df['label'] == 'OTH'].sum(numeric_only=True)
+    print(oth_features.sort_values(ascending=False).head(5))
+
+
+
+def save_feature_data(X, y, feature_names, output_dir='phase2_output'):
+    print("\n" + "="*50)
+    print("SAVING DATA FOR PHASE 3")
+    print("="*50)
+    
+    # create the output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # save as pickle
+    with open(f'{output_dir}/feature_matrix.pkl', 'wb') as f:
+        pickle.dump(X, f)
+        
+    with open(f'{output_dir}/labels.pkl', 'wb') as f:
+        pickle.dump(y, f)
+        
+    with open(f'{output_dir}/feature_names.pkl', 'wb') as f:
+        pickle.dump(feature_names, f)
+    
+    # CSV version 
+    combined = X.copy()
+    combined['label'] = y
+    combined.to_csv(f'{output_dir}/feature_matrix.csv', index=False)
+    
+    print(f"All data saved to '{output_dir}/' folder.")
+
+
+
+# use the function in apply to determine the tag and creates a panda series (kind of like a list)
 tag = df.apply(lambda row: label_is_true(row), axis = 1)
 
-#creates a new column that will contain either "ENG", "FIL", or "OTH"
+# creates a new column that will contain either "ENG", "FIL", or "OTH"
 df['three_class_label'] = tag.apply(map_to_three_classes)
+print("Tag mapping complete.")
+print(f"Total rows: {len(df)}")
+print(f"Label distribution:\n{df['three_class_label'].value_counts()}\n")
 
-# --- Test for Task 2.5 ---
-print("\nTesting Master Feature Extractor:")
-test_words = ['naglunch', 'kumain', 'corrupt', 'playing', 'Manila', '.', '2023']
 
-for word in test_words:
-    features = extract_all_features(word)
-    print(f"\nWord: '{word}' ({len(features)} features extracted)")
-    
-    # Let's just show a few features to prove it works
-    print(f"  ... has_nag_prefix: {features.get('has_nag_prefix')}")
-    print(f"  ... has_ing_suffix: {features.get('has_ing_suffix')}")
-    print(f"  ... vowel_ratio: {features.get('vowel_ratio')}")
-    print(f"  ... is_number: {features.get('is_number')}")
+X, y, feature_names = create_feature_matrix(df)
+
+print("\n--- Feature Matrix Preview (X) ---")
+print(X.head())
+print("\n--- Labels Preview (y) ---")
+print(y.head())
 
 
 
+analyze_features(X, y)
+save_feature_data(X, y, feature_names)
 
 
