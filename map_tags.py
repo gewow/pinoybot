@@ -172,31 +172,32 @@ def create_feature_matrix(data):
 
     return X, y, feature_names
 
-def analyze_features(X, y):
+#FOR DEBUGGING:
+# def analyze_features(X, y):
    
-    print("\n" + "="*50)
-    print("FEATURE ANALYSIS")
-    print("="*50)
+#     print("\n" + "="*50)
+#     print("FEATURE ANALYSIS")
+#     print("="*50)
     
-    # combine X and y into one DataFrame for easy filtering
-    analysis_df = X.copy()
-    analysis_df['label'] = y
+#     # combine X and y into one DataFrame for easy filtering
+#     analysis_df = X.copy()
+#     analysis_df['label'] = y
     
-    # check FIL features
-    print("\n--- Top 5 Features for FIL ---")
-    # get all rows that are FIL, sum up their feature columns, and show the biggest
-    fil_features = analysis_df[analysis_df['label'] == 'FIL'].sum(numeric_only=True)
-    print(fil_features.sort_values(ascending=False).head(5))
+#     # check FIL features
+#     print("\n--- Top 5 Features for FIL ---")
+#     # get all rows that are FIL, sum up their feature columns, and show the biggest
+#     fil_features = analysis_df[analysis_df['label'] == 'FIL'].sum(numeric_only=True)
+#     print(fil_features.sort_values(ascending=False).head(5))
     
-    # check ENG features
-    print("\n--- Top 5 Features for ENG ---")
-    eng_features = analysis_df[analysis_df['label'] == 'ENG'].sum(numeric_only=True)
-    print(eng_features.sort_values(ascending=False).head(5))
+#     # check ENG features
+#     print("\n--- Top 5 Features for ENG ---")
+#     eng_features = analysis_df[analysis_df['label'] == 'ENG'].sum(numeric_only=True)
+#     print(eng_features.sort_values(ascending=False).head(5))
     
-    # check OTH features
-    print("\n--- Top 5 Features for OTH ---")
-    oth_features = analysis_df[analysis_df['label'] == 'OTH'].sum(numeric_only=True)
-    print(oth_features.sort_values(ascending=False).head(5))
+#     # check OTH features
+#     print("\n--- Top 5 Features for OTH ---")
+#     oth_features = analysis_df[analysis_df['label'] == 'OTH'].sum(numeric_only=True)
+#     print(oth_features.sort_values(ascending=False).head(5))
 
 
 
