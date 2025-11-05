@@ -247,7 +247,7 @@ print(y.head())
 
 
 
-analyze_features(X, y)
+#analyze_features(X, y)
 save_feature_data(X, y, feature_names)
 
 
