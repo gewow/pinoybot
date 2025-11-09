@@ -118,7 +118,7 @@ def extract_character_features(word):
 
     return features
     
-def extract_special_token_features(word): # I renamed the function
+def extract_special_token_features(word): 
     features = {}
 
     #numbers
