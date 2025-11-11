@@ -21,6 +21,13 @@ with open('phase3_output/pinoybot_model.pkl', 'rb') as f:
 with open('phase3_output/feature_names.pkl', 'rb') as f:
     feature_names = pickle.load(f)
 
+#common short english words
+COMMON_ENG_SHORT_WORDS = {
+    'go', 'new', 'you', 'car', 'love', 'game', 'wait', 'for', 'true',
+    'view', 'is', 'are', 'was', 'run', 'eat', 'get', 'has', 'had',
+    'let', 'see', 'say', 'the', 'and', 'but', 'if', 'an'
+}
+
 def extract_filipino_affix_features(word):
         word_lowered = word.lower()
         features = {}
@@ -101,13 +108,18 @@ def extract_character_features(word):
         features['consonant_ratio'] = features['consonant_count']/len(word_lowered)
 
     #bigram count (bigrams are 2 adjacent characters)
-    features['fil_bigram_count'] = len(re.findall(r"(ng)|(ay)|(an)|(in)|(ka)|(sa)", word_lowered))
-    features['eng_bigram_count'] = len(re.findall(r"(th)|(he)|(er)|(ed)|(es)|(ly)", word_lowered))
+    features['fil_bigram_count'] = len(re.findall(r"ng|ay|an|in|ka|sa", word_lowered))
+    features['eng_bigram_count'] = len(re.findall(r"th|he|er|ed|es|ly", word_lowered))
 
+    #trigram count
+    features['fil_trigram_count'] = len(re.findall(r"ang|nga|mag|pag|nag|kan|han|tin|yan|yon", word_lowered))
+    features['eng_trigram_count'] = len(re.findall(r"ing|ent|ion|tha|nth|int|ted|thi|est", word_lowered))
+    
     return features
     
 def extract_special_token_features(word):
     features = {}
+    word_lowered = word.lower()
 
     #numbers
     features['is_number'] = bool(re.match(r'^[0-9]+([.,][0-9]+)*$', word))
@@ -128,6 +140,9 @@ def extract_special_token_features(word):
     #length
     features['word_length'] = len(word)
     features['is_very_short'] = bool(len(word) <= 2)
+
+    #gazetteer feature
+    features['is_common_eng_word'] = word_lowered in COMMON_ENG_SHORT_WORDS
 
     return features
 
@@ -190,14 +205,73 @@ def tag_language(tokens: List[str]) -> List[str]:
     return tags
     
 
-if __name__ == "__main__":
-    # Example usage
-    example_tokens = ["Check", "mo", "yung", "new", "update", "sa", "game", "."]
-    print("Tokens:", example_tokens)
-    tags = tag_language(example_tokens)
+# if __name__ == "__main__":
+#     # Example usage
+#     example_tokens =  ["Let's", 'go', 'na', 'sa', 'EDSA.']
 
-    print("\n--- Results ---")
-    output = ""
-    for word, tag in zip(example_tokens, tags):
-        output += f"{word}[{tag}] "
-    print(output)
+
+#     print("Tokens:", example_tokens)
+#     tags = tag_language(example_tokens)
+
+#     print("\n--- Results ---")
+#     output = ""
+#     for word, tag in zip(example_tokens, tags):
+#         output += f"{word}[{tag}] "
+#     print(output)
+
+
+if __name__ == "__main__":
+    
+    # --- 1. DEFINE YOUR BATCH TEST SENTENCES ---
+    # Each sentence is a list of tokens
+    test_sentences = [
+        ["Let's", "go", "na", "sa", "mall"],
+        ["Super", "ganda", "ng", "new", "shoes", "mo", "!"],
+        ["Nag", "dinner", "na", "kami", "kagabi", "."],
+        ["Bukas", "nalang", "tayo", "mag", "usap", "."],
+        ["Gusto", "ko", "ng", "sapatos", "."],
+        ["Kumain", "ka", "na", "ba", "?"],
+        ["Can", "you", "scan", "the", "document", "?"],
+        ["That", "is", "an", "amazing", "view", "!"],
+        ["Please", "wait", "for", "me", "."],
+        ["OMG", "!", "That's", "100", "%", "true", "!"],
+        ["My", "email", "is", "name@test.com", "..."],
+        ["call", "me", "at", "0917-7943-577", "."],
+        ["I", "love", "you", "mahal", "kita", "."],
+        ["Nag-stop", "ang", "car", "sa", "gitna", "ng", "EDSA."],
+        ["Check", "mo", "yung", "new", "update", "sa", "game", "."],
+        # Your "Purified" Gazetteer Test
+        ['go', 'new', 'you', 'car', 'love', 'game', 'wait', 'for', 'true',
+         'view', 'is', 'are', 'was', 'run', 'eat', 'get', 'has', 'had',
+         'let', 'see', 'say', 'the', 'and', 'but', 'if', 'an'],
+        # Ambiguous Words Test
+        ['me', 'at', 'so', 'my', 'am']
+    ]
+
+    print("==========================================")
+    print("RUNNING BATCH TEST ON PinoyBot")
+    print(f"Testing {len(test_sentences)} sentences...")
+    print("==========================================")
+
+    # --- 2. LOOP THROUGH EACH SENTENCE ---
+    for i, tokens in enumerate(test_sentences):
+        
+        print(f"\n--- Test Case #{i+1} ---")
+        print(f"Tokens: {tokens}")
+        
+        # --- 3. CALL YOUR tag_language FUNCTION ---
+        # This function is already defined above in your script
+        tags = tag_language(tokens)
+        
+        # --- 4. FORMAT AND PRINT THE OUTPUT ---
+        output = ""
+        for word, tag in zip(tokens, tags):
+            output += f"{word}[{tag}] "
+        
+        print("--- Results ---")
+        print(output.strip()) # .strip() removes any extra space at the end
+        
+    print("\n==========================================")
+    print("Batch test complete.")
+    print("==========================================")
+

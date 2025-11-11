@@ -9,7 +9,16 @@ import os
 #load validated csv file
 #df = pd.read_csv("Group2_ValidatedDataSet.xlsx - Data.csv") #first version
 #df = pd.read_csv("Group2_ValidatedDataSet_V2.csv") #second version
-df = pd.read_csv("Group2_ValidatedDataSet_V3.csv") #third version
+#df = pd.read_csv("Group2_ValidatedDataSet_V3.csv") #third version
+df = pd.read_csv("Group2_ValidatedDataSet_V4.csv") #fourth version
+
+
+#common short english words
+COMMON_ENG_SHORT_WORDS = {
+    'go', 'new', 'you', 'car', 'love', 'game', 'wait', 'for', 'true',
+    'view', 'is', 'are', 'was', 'run', 'eat', 'get', 'has', 'had',
+    'let', 'see', 'say', 'the', 'and', 'but', 'if', 'an'
+}
 
 #reads the tag and determines its class
 def map_to_three_classes(tag):
@@ -115,13 +124,18 @@ def extract_character_features(word):
         features['consonant_ratio'] = features['consonant_count']/len(word_lowered)
 
     #bigram count (bigrams are 2 adjacent characters)
-    features['fil_bigram_count'] = len(re.findall(r"(ng)|(ay)|(an)|(in)|(ka)|(sa)", word_lowered))
-    features['eng_bigram_count'] = len(re.findall(r"(th)|(he)|(er)|(ed)|(es)|(ly)", word_lowered))
+    features['fil_bigram_count'] = len(re.findall(r"ng|ay|an|in|ka|sa", word_lowered))
+    features['eng_bigram_count'] = len(re.findall(r"th|he|er|ed|es|ly", word_lowered))
+
+    #trigram count
+    features['fil_trigram_count'] = len(re.findall(r"ang|nga|mag|pag|nag|kan|han|tin|yan|yon", word_lowered))
+    features['eng_trigram_count'] = len(re.findall(r"ing|ent|ion|tha|nth|int|ted|thi|est", word_lowered))
 
     return features
     
 def extract_special_token_features(word): 
     features = {}
+    word_lowered = word.lower()
 
     #numbers
     features['is_number'] = bool(re.match(r'^[0-9]+([.,][0-9]+)*$', word))
@@ -142,6 +156,10 @@ def extract_special_token_features(word):
     #length
     features['word_length'] = len(word)
     features['is_very_short'] = bool(len(word) <= 2)
+
+    #gazetteer feature
+    features['is_common_eng_word'] = word_lowered in COMMON_ENG_SHORT_WORDS
+
 
     return features
 
