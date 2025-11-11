@@ -53,54 +53,73 @@ X_val_nb = X_val.astype(int)
 X_test_nb = X_test.astype(int)
 
 
-modelNB = MultinomialNB(alpha=1.0)# Builds the classifier - NOTE: Add "alpha" to ensure that there is a NON-ZERO PROBABILITY (Check notes for explanation)!
-modelNB.fit(X_train_nb, y_train)# Trains the model -  IT'S TOO EASY!
+# modelNB = MultinomialNB(alpha=1.0)# Builds the classifier - NOTE: Add "alpha" to ensure that there is a NON-ZERO PROBABILITY (Check notes for explanation)!
+# modelNB.fit(X_train_nb, y_train)# Trains the model -  IT'S TOO EASY!
 
 # OPTION B: Decision Tree Classifier - comment out NAIVE BAYES if attempting.
-# modelDT = DecisionTreeClassifier(random_state=50, max_depth=10) # max_depth=10 is a good start
-# modelDT.fit(X_train_nb, y_train)
+modelDT = DecisionTreeClassifier(random_state=50, max_depth=10) # max_depth=10 is a good start
+modelDT.fit(X_train_nb, y_train)
 
 
-#Task #4: Validation using the 15% validation data
-y_prediction_val = modelNB.predict(X_val_nb) #for multinomial NB
-matrix = confusion_matrix(y_val,y_prediction_val) 
+#Task #4: Validation using the 15% validation data multinomial NB
+# y_prediction_val = modelNB.predict(X_val_nb) #for multinomial NB
+# matrix = confusion_matrix(y_val,y_prediction_val) 
 
 #Print test for naive bayes:
-print(classification_report(y_val, y_prediction_val, target_names=['ENG', 'FIL', 'OTH']))
-print(matrix)
-print("\n(Rows = Actual class, Columns = Predicted class)")
-print("     ENG  FIL  OTH")
-for i, label in enumerate(['ENG', 'FIL', 'OTH']):
-    print(f"{label}  {matrix[i]}")
+# print(classification_report(y_val, y_prediction_val, target_names=['ENG', 'FIL', 'OTH']))
+# print(matrix)
+# print("\n(Rows = Actual class, Columns = Predicted class)")
+# print("     ENG  FIL  OTH")
+# for i, label in enumerate(['ENG', 'FIL', 'OTH']):
+#     print(f"{label}  {matrix[i]}")
+
+# OPTION B: Decision Tree Classifier
+print("--- Training Model: Decision Tree ---")
+modelDT = DecisionTreeClassifier(random_state=50, max_depth=10) # max_depth=10 is a good start
+modelDT.fit(X_train_nb, y_train)
 
 
 # --- Validation: Decision Tree ---
-# print("\n" + "="*50)
-# print("VALIDATION RESULTS: DECISION TREE (OPTION B)")
-# print("="*50)
-# y_prediction_val_DT = modelDT.predict(X_val_nb) # Use the DT model to predict
-# matrix_DT = confusion_matrix(y_val, y_prediction_val_DT)
-
-# print(classification_report(y_val, y_prediction_val_DT, target_names=['ENG', 'FIL', 'OTH'])) # Use the DT predictions
-# print(matrix_DT)
-# print("\n(Rows = Actual class, Columns = Predicted class)")
-# for i, label in enumerate(['ENG', 'FIL', 'OTH']):
-#     print(f"{label}  {matrix_DT[i]}")
-
-
-# FINAL TESTING using the 15% test data
 print("\n" + "="*50)
-print("FINAL TEST RESULTS: Multinomial Naive Bayes")
+print("VALIDATION RESULTS: DECISION TREE (OPTION B)")
+print("="*50)
+y_prediction_val_DT = modelDT.predict(X_val_nb) # Use the DT model to predict
+matrix_DT = confusion_matrix(y_val, y_prediction_val_DT)
+
+print(classification_report(y_val, y_prediction_val_DT, target_names=['ENG', 'FIL', 'OTH'])) # Use the DT predictions
+print(matrix_DT)
+print("\n(Rows = Actual class, Columns = Predicted class)")
+for i, label in enumerate(['ENG', 'FIL', 'OTH']):
+    print(f"{label}  {matrix_DT[i]}")
+
+
+# # FINAL TESTING using the 15% test data Multionomial Naive Bayes
+# print("\n" + "="*50)
+# print("FINAL TEST RESULTS: Multinomial Naive Bayes")
+# print("="*50)
+
+# # Use the model to predict on the TEST set
+# y_prediction_test = modelNB.predict(X_test_nb) 
+
+# # Compare the predictions to the REAL answers
+# matrix_test = confusion_matrix(y_test, y_prediction_test)
+
+# print(classification_report(y_test, y_prediction_test, target_names=['ENG', 'FIL', 'OTH']))
+# print(matrix_test)
+
+# FINAL TESTING for Decision Tree
+print("\n" + "="*50)
+print("FINAL TEST RESULTS: Decision Tree")
 print("="*50)
 
-# Use the model to predict on the TEST set
-y_prediction_test = modelNB.predict(X_test_nb) 
+# Use the DT model to predict on the TEST set
+y_prediction_test_DT = modelDT.predict(X_test_nb) 
 
 # Compare the predictions to the REAL answers
-matrix_test = confusion_matrix(y_test, y_prediction_test)
+matrix_test_DT = confusion_matrix(y_test, y_prediction_test_DT)
 
-print(classification_report(y_test, y_prediction_test, target_names=['ENG', 'FIL', 'OTH']))
-print(matrix_test)
+print(classification_report(y_test, y_prediction_test_DT, target_names=['ENG', 'FIL', 'OTH']))
+print(matrix_test_DT)
 
 
 #SAVING the final model
@@ -115,7 +134,7 @@ os.makedirs(output_dir, exist_ok=True)
 
 #pkl file for the model
 with open(f'{output_dir}/pinoybot_model.pkl', 'wb') as f:
-    pickle.dump(modelNB, f)
+    pickle.dump(modelDT, f)
 
 #pkl file for the feature names
 with open(f'{output_dir}/feature_names.pkl', 'wb') as f:

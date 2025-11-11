@@ -7,7 +7,9 @@ import os
 #This will be used to train the model
 
 #load validated csv file
-df = pd.read_csv("Group2_ValidatedDataSet.xlsx - Data.csv")
+#df = pd.read_csv("Group2_ValidatedDataSet.xlsx - Data.csv") #first version
+#df = pd.read_csv("Group2_ValidatedDataSet_V2.csv") #second version
+df = pd.read_csv("Group2_ValidatedDataSet_V3.csv") #third version
 
 #reads the tag and determines its class
 def map_to_three_classes(tag):
