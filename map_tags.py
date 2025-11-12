@@ -9,8 +9,7 @@ import os
 #load validated csv file
 #df = pd.read_csv("Group2_ValidatedDataSet.xlsx - Data.csv") #first version
 #df = pd.read_csv("Group2_ValidatedDataSet_V2.csv") #second version
-#df = pd.read_csv("Group2_ValidatedDataSet_V3.csv") #third version
-df = pd.read_csv("Group2_ValidatedDataSet_V4.csv") #fourth version
+df = pd.read_csv("Group2_ValidatedDataSet_V3.csv") #third version
 
 
 #common short english words
@@ -18,6 +17,10 @@ COMMON_ENG_SHORT_WORDS = {
     'go', 'new', 'you', 'car', 'love', 'game', 'wait', 'for', 'true',
     'view', 'is', 'are', 'was', 'run', 'eat', 'get', 'has', 'had',
     'let', 'see', 'say', 'the', 'and', 'but', 'if', 'an'
+}
+
+COMMON_FIL_SHORT_WORDS = {
+    'nag', 'ng', 'ang', 'baka', 'ba', 'daw', 'mo', 'ko', 'ano', 'gusto', 'mahal', 'gitna'
 }
 
 #reads the tag and determines its class
@@ -98,6 +101,7 @@ def extract_english_affixes(word):
     features['has_less_suffix'] = bool(re.search(r"less$", word_lowered))
     features['has_able_suffix'] = bool(re.search(r"able$", word_lowered))
     features['has_ible_suffix'] = bool(re.search(r"ible$", word_lowered))
+    features['has_ail_suffix'] = bool(re.search(r"ail$", word_lowered))
 
     return features
 
@@ -129,7 +133,7 @@ def extract_character_features(word):
 
     #trigram count
     features['fil_trigram_count'] = len(re.findall(r"ang|nga|mag|pag|nag|kan|han|tin|yan|yon", word_lowered))
-    features['eng_trigram_count'] = len(re.findall(r"ing|ent|ion|tha|nth|int|ted|thi|est", word_lowered))
+    features['eng_trigram_count'] = len(re.findall(r"ing|ent|ion|tha|nth|int|ted|thi|est|ail", word_lowered))
 
     return features
     
@@ -159,6 +163,7 @@ def extract_special_token_features(word):
 
     #gazetteer feature
     features['is_common_eng_word'] = word_lowered in COMMON_ENG_SHORT_WORDS
+    features['is_common_fil_word'] = word_lowered in COMMON_FIL_SHORT_WORDS
 
 
     return features

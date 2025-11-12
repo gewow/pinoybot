@@ -28,6 +28,11 @@ COMMON_ENG_SHORT_WORDS = {
     'let', 'see', 'say', 'the', 'and', 'but', 'if', 'an'
 }
 
+#common short filipino words
+COMMON_FIL_SHORT_WORDS = {
+    'nag', 'ng', 'ang', 'baka', 'ba', 'daw', 'mo', 'ko', 'ano', 'gusto', 'mahal', 'gitna'
+}
+
 def extract_filipino_affix_features(word):
         word_lowered = word.lower()
         features = {}
@@ -82,6 +87,7 @@ def extract_english_affixes(word):
     features['has_less_suffix'] = bool(re.search(r"less$", word_lowered))
     features['has_able_suffix'] = bool(re.search(r"able$", word_lowered))
     features['has_ible_suffix'] = bool(re.search(r"ible$", word_lowered))
+    features['has_ail_suffix'] = bool(re.search(r"ail$", word_lowered))
 
     return features
 
@@ -113,7 +119,7 @@ def extract_character_features(word):
 
     #trigram count
     features['fil_trigram_count'] = len(re.findall(r"ang|nga|mag|pag|nag|kan|han|tin|yan|yon", word_lowered))
-    features['eng_trigram_count'] = len(re.findall(r"ing|ent|ion|tha|nth|int|ted|thi|est", word_lowered))
+    features['eng_trigram_count'] = len(re.findall(r"ing|ent|ion|tha|nth|int|ted|thi|est|ail", word_lowered))
     
     return features
     
@@ -143,6 +149,7 @@ def extract_special_token_features(word):
 
     #gazetteer feature
     features['is_common_eng_word'] = word_lowered in COMMON_ENG_SHORT_WORDS
+    features['is_common_fil_word'] = word_lowered in COMMON_FIL_SHORT_WORDS
 
     return features
 
@@ -238,7 +245,7 @@ if __name__ == "__main__":
         ["My", "email", "is", "name@test.com", "..."],
         ["call", "me", "at", "0917-7943-577", "."],
         ["I", "love", "you", "mahal", "kita", "."],
-        ["Nag-stop", "ang", "car", "sa", "gitna", "ng", "EDSA."],
+        ["Nag-stop", "ang", "car", "sa", "gitna", "ng", "ED.SA", "."],
         ["Check", "mo", "yung", "new", "update", "sa", "game", "."],
         # Your "Purified" Gazetteer Test
         ['go', 'new', 'you', 'car', 'love', 'game', 'wait', 'for', 'true',
