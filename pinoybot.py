@@ -212,73 +212,20 @@ def tag_language(tokens: List[str]) -> List[str]:
     return tags
     
 
-# if __name__ == "__main__":
-#     # Example usage
-#     example_tokens =  ["Let's", 'go', 'na', 'sa', 'EDSA.']
-
-
-#     print("Tokens:", example_tokens)
-#     tags = tag_language(example_tokens)
-
-#     print("\n--- Results ---")
-#     output = ""
-#     for word, tag in zip(example_tokens, tags):
-#         output += f"{word}[{tag}] "
-#     print(output)
-
-
 if __name__ == "__main__":
-    
-    # --- 1. DEFINE YOUR BATCH TEST SENTENCES ---
-    # Each sentence is a list of tokens
-    test_sentences = [
-        ["Let's", "go", "na", "sa", "mall"],
-        ["Super", "ganda", "ng", "new", "shoes", "mo", "!"],
-        ["Nag", "dinner", "na", "kami", "kagabi", "."],
-        ["Bukas", "nalang", "tayo", "mag", "usap", "."],
-        ["Gusto", "ko", "ng", "sapatos", "."],
-        ["Kumain", "ka", "na", "ba", "?"],
-        ["Can", "you", "scan", "the", "document", "?"],
-        ["That", "is", "an", "amazing", "view", "!"],
-        ["Please", "wait", "for", "me", "."],
-        ["OMG", "!", "That's", "100", "%", "true", "!"],
-        ["My", "email", "is", "name@test.com", "..."],
-        ["call", "me", "at", "0917-7943-577", "."],
-        ["I", "love", "you", "mahal", "kita", "."],
-        ["Nag-stop", "ang", "car", "sa", "gitna", "ng", "ED.SA", "."],
-        ["Check", "mo", "yung", "new", "update", "sa", "game", "."],
-        # Your "Purified" Gazetteer Test
-        ['go', 'new', 'you', 'car', 'love', 'game', 'wait', 'for', 'true',
-         'view', 'is', 'are', 'was', 'run', 'eat', 'get', 'has', 'had',
-         'let', 'see', 'say', 'the', 'and', 'but', 'if', 'an'],
-        # Ambiguous Words Test
-        ['me', 'at', 'so', 'my', 'am']
-    ]
+    # Example usage
+    example_tokens =  ['hahaha', 'you', 'are', 'nakakatawa', 'so', 'much', 'mwa', '@ALEX.gmail.com', '091754362']
 
-    print("==========================================")
-    print("RUNNING BATCH TEST ON PinoyBot")
-    print(f"Testing {len(test_sentences)} sentences...")
-    print("==========================================")
 
-    # --- 2. LOOP THROUGH EACH SENTENCE ---
-    for i, tokens in enumerate(test_sentences):
-        
-        print(f"\n--- Test Case #{i+1} ---")
-        print(f"Tokens: {tokens}")
-        
-        # --- 3. CALL YOUR tag_language FUNCTION ---
-        # This function is already defined above in your script
-        tags = tag_language(tokens)
-        
-        # --- 4. FORMAT AND PRINT THE OUTPUT ---
-        output = ""
-        for word, tag in zip(tokens, tags):
-            output += f"{word}[{tag}] "
-        
-        print("--- Results ---")
-        print(output.strip()) # .strip() removes any extra space at the end
-        
-    print("\n==========================================")
-    print("Batch test complete.")
-    print("==========================================")
+    print("Tokens:", example_tokens)
+    tags = tag_language(example_tokens)
+
+    print("\n--- Results ---")
+    output = ""
+    for word, tag in zip(example_tokens, tags):
+        output += f"{word}[{tag}] "
+    print(output)
+
+
+
 

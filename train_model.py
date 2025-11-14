@@ -74,9 +74,9 @@ modelDT.fit(X_train_nb, y_train)
 #     print(f"{label}  {matrix[i]}")
 
 # OPTION B: Decision Tree Classifier
-print("--- Training Model: Decision Tree ---")
-modelDT = DecisionTreeClassifier(random_state=50, max_depth=10) # max_depth=10 is a good start
-modelDT.fit(X_train_nb, y_train)
+# print("--- Training Model: Decision Tree ---")
+# modelDT = DecisionTreeClassifier(random_state=50, max_depth=10) # max_depth=10 is a good start
+# modelDT.fit(X_train_nb, y_train)
 
 
 # --- Validation: Decision Tree ---
