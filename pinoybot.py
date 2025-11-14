@@ -15,10 +15,10 @@ import re
 import pandas as pd
 
 # 1. Load your trained model from disk (e.g., using pickle or joblib)
-with open('phase3_output/pinoybot_model.pkl', 'rb') as f:
+with open('pinoybot_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-with open('phase3_output/feature_names.pkl', 'rb') as f:
+with open('training/phase3_output/feature_names.pkl', 'rb') as f:
     feature_names = pickle.load(f)
 
 #common short english words
@@ -214,7 +214,7 @@ def tag_language(tokens: List[str]) -> List[str]:
 
 if __name__ == "__main__":
     # Example usage
-    example_tokens =  ['hahaha', 'you', 'are', 'nakakatawa', 'so', 'much', 'mwa', '@ALEX.gmail.com', '091754362']
+    example_tokens =  ['I', 'love', 'you', 'mahal', 'kita', '.']
 
 
     print("Tokens:", example_tokens)

@@ -11,7 +11,7 @@ import os
 #df = pd.read_csv("Group2_ValidatedDataSet_V2.csv") #second version
 #df = pd.read_csv("Group2_ValidatedDataSet_V3.csv") #third version
 #df = pd.read_csv("Group2_ValidatedDataSet_V4.csv") #fourth version
-df = pd.read_csv("Group2_ValidatedDataSet_V5.csv") #fifth version (FINAL/BEST VERSION)
+df = pd.read_csv("data/Group2_ValidatedDataSet_V5.csv") #fifth version (FINAL/BEST VERSION)
 #df = pd.read_csv("Group2_ValidatedDataSet_V6.csv") #sixth version
 
 
@@ -229,7 +229,7 @@ def create_feature_matrix(data):
 
 
 
-def save_feature_data(X, y, feature_names, output_dir='phase2_output'):
+def save_feature_data(X, y, feature_names, output_dir='training/phase2_output'):
     print("\n" + "="*50)
     print("SAVING DATA FOR PHASE 3")
     print("="*50)

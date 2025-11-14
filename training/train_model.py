@@ -7,13 +7,13 @@ from sklearn import metrics
 import os
 
 # Task #1: Get data
-with open('phase2_output/feature_matrix.pkl', 'rb') as f:
+with open('training/phase2_output/feature_matrix.pkl', 'rb') as f:
     X = pickle.load(f) #features 
 
-with open('phase2_output/labels.pkl', 'rb') as f:
+with open('training/phase2_output/labels.pkl', 'rb') as f:
     y = pickle.load(f) #answers
 
-with open('phase2_output/feature_names.pkl', 'rb') as f:
+with open('training/phase2_output/feature_names.pkl', 'rb') as f:
     feature_names = pickle.load(f)
 
 #Task #2: 70-15-15 Validation Testing - Splits all the words from the ValidatedDataSet file.
@@ -129,7 +129,7 @@ print("SAVING MODEL TO BE USED BY PINOYBOT")
 print("="*50)
 
 #create output directory if it does not exist
-output_dir = 'phase3_output'
+output_dir = 'training/phase3_output'
 os.makedirs(output_dir, exist_ok=True)
 
 #pkl file for the model
@@ -141,3 +141,10 @@ with open(f'{output_dir}/feature_names.pkl', 'wb') as f:
     pickle.dump(feature_names, f)
 
 print(f"Model saved to {output_dir}/pinoybot_model.pkl")
+
+#copy for pinoybot in pinoybot folder
+root_model_path = 'pinoybot_model.pkl'
+with open(root_model_path, 'wb') as f:
+    pickle.dump(modelDT, f) 
+
+print(f"Model copy saved to root folder: {root_model_path}")
